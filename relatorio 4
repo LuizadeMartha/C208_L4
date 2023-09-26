@@ -1,1 +1,124 @@
-rr
+#Exer1
+.text
+
+li $t0, 10
+li $t1, 25
+li $t2, 43
+li $t3, 89
+
+#Deslocamento a direita
+srl $s0, $t0, 8
+srl $s1, $t1, 8
+srl $s2, $t2, 8
+srl $s3, $t3, 8
+
+#Deslocamento a esquerda
+sll $s4, $t0, 4
+sll $s5, $t1, 4
+sll $s6, $t2, 4
+sll $s7, $t3, 4
+
+#Exer2
+.text
+
+li $t0, 324
+li $t1, 100
+li $t2, 2018
+li $t3, 1970
+li $t4, 33
+li $t5, 66
+
+and $s0, $t0, $t1
+and $s1, $t2, $t3
+and $s2, $t4, $t5
+
+#Exer3
+
+.text
+
+li $t0, 324
+li $t1, 100
+li $t2, 2018
+li $t3, 1970
+li $t4, 33
+li $t5, 66
+
+or $s0, $t0, $t1
+or $s1, $t2, $t3
+or $s2, $t4, $t5
+
+
+#Exer4
+
+.text
+
+li $t0, 324
+li $t1, 100
+li $t2, 2018
+li $t3, 1970
+li $t4, 33
+li $t5, 66
+
+nor $s0, $t0, $t1
+nor $s1, $t2, $t3
+nor $s2, $t5, $t4
+
+#Exer5
+.text
+
+li $t0, 2 #a
+li $t1, 4 #b
+li $t2, 1 #c
+
+#1 a==b
+
+bne $t0, $t1, ELSE1
+	add $t2, $t0, $t1
+	sub $t0, $t1, $t2
+	j END1
+ELSE1:
+	add $t1, $t0, $t2
+	sub $t2, $t1, $t2
+END1:
+
+#2 a!=b
+
+beq $t0, $t1, ELSE2
+	add $t2, $t0, $t1
+	sub $t0, $t1, $t2
+	j END2
+ELSE2:
+	add $t1, $t0, $t2
+	sub $t2, $t1, $t2
+END2:
+
+#3 a>b
+blt $t0, $t1, ELSE3
+	add $t2, $t0, $t1
+	sub $t0, $t1, $t2
+	j END3
+ELSE3:
+	add $t1, $t0, $t2
+	sub $t2, $t1, $t2
+END3:
+
+#4 a<b
+bgt $t0, $t1, ELSE4
+	add $t2, $t0, $t1
+	sub $t0, $t1, $t2
+	j END4
+ELSE4:
+	add $t1, $t0, $t2
+	sub $t2, $t1, $t2
+END4:
+
+#5
+li $t3, 10
+li $t4, 0
+
+WHILE:
+	beqz $t3, EXIT
+	addi $t4, $t4, 5
+	subi $t3, $t3, 2
+	j WHILE
+EXIT:
