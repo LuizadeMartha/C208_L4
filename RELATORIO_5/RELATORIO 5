@@ -1,0 +1,61 @@
+#exercico 1
+.data
+a: .word 1   # Definindo 'a' como uma palavra (4 bytes) e inicializando com o valor 1
+b: .word 2   # Definindo 'b' como uma palavra (4 bytes) e inicializando com o valor 2
+c: .word 3   # Definindo 'c' como uma palavra (4 bytes) e inicializando com o valor 3
+.text
+la $s1, a    # Carrega o endereço da variável 'a' no registrador $s1
+la $s2, b    # Carrega o endereço da variável 'b' no registrador $s2
+la $s3, c    # Carrega o endereço da variável 'c' no registrador $s3
+	
+.text
+la $s1, a
+la $s2, b
+la $s3, c
+		
+#letra A
+sub $t1, $s2, $s3   # Subtrai o valor em $s3 do valor em $s2 e armazena o resultado em $t1
+sw $t1, 10($s1)     # Armazena o valor em $t1 na memória, 10 bytes a partir do endereço em $s1 (atualiza 'a')
+#letra B
+add $t2, $s1, $s3   # Soma o valor em $s1 ao valor em $s3 e armazena o resultado em $t2
+sw $t2, 245($s2)    # Armazena o valor em $t2 na memória, 245 bytes a partir do endereço em $s2 (atualiza 'b')
+#letra C
+sub $t3, $s2, $s1   # Subtrai o valor em $s1 do valor em $s2 e armazena o resultado em $t3
+sw $t3, 0($s3)      # Armazena o valor em $t3 na memória, 0 bytes a partir do endereço em $s3 (atualiza 'c')
+
+
+
+#EXERCICO 2
+#letra A
+lw $t1, 15($s2)  # Carrega o valor de 'b' (registrador $s2) com um deslocamento de 15 bytes
+sub $t1, $t1, $s3  # Subtrai o valor em $s3 do valor em $t1
+sw $t1, 0($s1)  # Armazena o resultado (em $t1) no endereço da variável 'a'
+#letra B
+lw $t2, 5($s1)  # Carrega o valor de 'a' (registrador $s1) com um deslocamento de 5 bytes
+lw $t3, 3($s3)  # Carrega o valor de 'c' (registrador $s3) com um deslocamento de 3 bytes
+add $t2, $t2, $t3  # Adiciona o valor em $t3 ao valor em $t2
+sw $t2, 0($s2)  # Armazena o resultado (em $t2) no endereço da variável 'b'
+#letra C
+lw $t3, 21($s1)  # Carrega o valor de 'a' (registrador $s1) com um deslocamento de 21 bytes
+sub $t3, $s2, $t3  # Subtrai o valor em $t3 do valor em $s2
+sw $t3, 0($s3)  # Armazena o resultado (em $t3) no endereço da variável 'c'
+
+#EXERCICO 3
+.data
+a: .word 4, 5  # Define um array 'a' com dois valores: 4 e 5
+
+.text
+la $s1, a      # Carrega o endereço base do array 'a' em $s1
+lw $t2, 0($s1) # Carrega o primeiro valor do array 'a' (4) em $t2
+
+li $t1, 0      # Inicializa $t1 com o valor 0
+
+bge $t2, 5, ELSE  # Compara o valor em $t2 (4) com 5; se for maior ou igual, vá para a etiqueta ELSE
+addi $t1, $t1, 2  # Se a condição for falsa, adicione 2 a $t1
+sw $t1, 0($s1)   # Armazena o valor atualizado em $t1 no array 'a'
+j EXIT            # Pula para a etiqueta EXIT
+
+ELSE:
+lw $t2, 4($s1)  # Carrega o segundo valor do array 'a' (5) em $t2
+addi $t1, $t2, 10  # Adiciona 10 a $t2 e armazena o resultado em $t1
+EXIT:
