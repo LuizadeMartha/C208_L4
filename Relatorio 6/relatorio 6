@@ -1,0 +1,72 @@
+.data
+N: .word 0                # Variável para armazenar o valor de N
+quadrado_soma: .word 0    # Variável para armazenar o quadrado da soma
+soma_quadrados: .word 0   # Variável para armazenar a soma dos quadrados
+resultado_msg: .asciiz "A diferença é: "
+
+.text
+.globl main
+
+main:
+    # Solicitar ao usuário o valor de N
+    li $v0, 4
+    la $a0, resultado_msg
+    syscall
+
+    # Ler o valor de N
+    li $v0, 5
+    syscall
+    sw $v0, N              # Armazenar N na variável
+
+    # Inicializar as variáveis
+    li $t0, 0              # Inicializar contador
+    sw $t0, quadrado_soma  # Inicializar quadrado_soma
+    sw $t0, soma_quadrados # Inicializar soma_quadrados
+
+    # Calcular o quadrado da soma dos N primeiros números naturais
+soma_loop:
+    lw $t1, N             # Carregar N em $t1
+    beq $t0, $t1, calculo_fim  # Se contador = N, pule para o cálculo final
+    add $t2, $t0, $t0     # t2 = 2 * contador
+    add $t2, $t2, $t0     # t2 = 3 * contador
+    add $t2, $t2, 1       # t2 = 3 * contador + 1
+    add $t2, $t2, $t1     # t2 = 3 * contador + 1 + N
+    add $t2, $t2, $t1     # t2 = 3 * contador + 1 + 2 * N
+    mul $t2, $t2, $t1     # t2 = (3 * contador + 1 + 2 * N) * N
+    add $t0, $t0, 1       # Incrementar contador
+    add $t1, $t1, $t2     # t1 = t1 + (3 * contador + 1 + 2 * N) * N
+    j soma_loop
+
+calculo_fim:
+    sw $t1, quadrado_soma  # Armazenar o resultado em quadrado_soma
+
+    # Calcular a soma dos quadrados dos N primeiros números naturais
+soma_quadrados_loop:
+    lw $t1, N             # Carregar N em $t1
+    beq $t0, $t1, calculo_final  # Se contador = N, pule para o cálculo final
+    add $t2, $t0, $t0     # t2 = 2 * contador
+    mul $t2, $t2, $t0     # t2 = 2 * contador * contador
+    add $t0, $t0, 1       # Incrementar contador
+    add $t1, $t1, $t2     # t1 = t1 + 2 * contador * contador
+    j soma_quadrados_loop
+
+calculo_final:
+    sw $t1, soma_quadrados  # Armazenar o resultado em soma_quadrados
+
+    # Calcular a diferença
+    lw $t3, quadrado_soma
+    lw $t4, soma_quadrados
+    sub $t5, $t3, $t4       # Diferença entre o quadrado da soma e a soma dos quadrados
+
+    # Imprimir o resultado
+    li $v0, 4
+    la $a0, resultado_msg
+    syscall
+
+    li $v0, 1
+    move $a0, $t5
+    syscall
+
+    # Terminar o programa
+    li $v0, 10
+    syscall
